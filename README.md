@@ -6,7 +6,7 @@ A modern, production-grade, full-stack pharmacy/medical inventory workflow appli
 
 ## 🌐 Live Demo
 You can view the live, deployed frontend for this project here:
-**https://medi-return-seven.vercel.app/dashboard**
+**https://medi-return-seven.vercel.app/**
 
 ---
 

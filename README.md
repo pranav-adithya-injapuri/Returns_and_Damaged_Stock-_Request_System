@@ -1,0 +1,174 @@
+# Returns & Damaged Stock Request System
+
+A modern, production-grade, full-stack pharmacy/medical inventory workflow application where pharmacies can submit expired or damaged medicine return requests to distributors/admins. Integrated with **Gemini Pro Vision** to automatically analyze and transcribe medicine pack details from images.
+
+---
+
+## 🌟 Features
+
+### 🏥 Pharmacy Users
+- **Dummy Session Authentication**: Secure local session store.
+- **Create Return Requests**: Input medicine details (Name, Batch, Expiry, Qty, Reason).
+- **Base64 Photo Upload**: Submit visual packaging proof directly to the backend.
+- **AI Condition Check**: Instant Gemini analysis report returned upon creation.
+- **Submission History**: Real-time request filters (Search by name/batch, filter by Pending/Approved/Rejected).
+
+### 🛡️ Admin Verification Managers
+- **Overview Dashboard**: Aggregated key statistics metrics (Total, Pending, Approved, Rejected) and live activity logs.
+- **Centralized Panel**: Track requests submitted by all pharmacies.
+- **Image Inspector**: Visual proof scanner for uploads.
+- **Gemini AI Transcription**: Review AI feedback on brand readability, package integrity, visible expiry dates, and moisture dampness.
+- **Approve/Reject Actions**: Instant database updates reflecting request decisions.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React.js, React Router DOM, Axios, Lucide Icons, Modern HSL CSS variables, responsive design
+- **Backend**: Python Flask, Flask-CORS, mysql-connector-python
+- **Database**: Local MySQL (MySQL Workbench)
+- **AI Engine**: Google Gemini (using the `google-generativeai` client SDK)
+
+---
+
+## 📦 Project File Structure
+
+```
+Returns_&_Damaged_Stock _Request_System/
+├── database/
+│   └── schema.sql             # SQL database table definitions & seed credentials
+├── backend/
+│   ├── app.py                 # Flask server bootstrapper
+│   ├── requirements.txt       # Backend dependencies
+│   ├── .env.example           # Reference environment configurations
+│   ├── .env                   # Configuration file (DB credentials & Gemini key)
+│   ├── config/
+│   │   └── db_config.py       # Configuration parser
+│   ├── database/
+│   │   └── db_helper.py       # Thread-safe MySQL connection pooling wrappers
+│   ├── services/
+│   │   └── gemini_service.py  # Gemini 1.5 Flash Prompt analysis integration
+│   ├── controllers/
+│   │   ├── auth_controller.py
+│   │   └── request_controller.py
+│   ├── routes/
+│   │   ├── auth_routes.py
+│   │   └── request_routes.py
+│   └── uploads/               # Local folder storing images (Git ignored)
+├── frontend/
+│   ├── package.json           # Frontend dependencies (React Router, Axios, Lucide)
+│   ├── vite.config.js         # Vite bundler configuration
+│   ├── index.html             # SEO Meta tags and root setup
+│   └── src/
+│       ├── main.jsx
+│       ├── index.css          # Premium design CSS themes (dark UI)
+│       ├── App.jsx            # Routing and protected layout shells
+│       ├── components/        # Reusable functional components
+│       │   ├── Sidebar.jsx
+│       │   ├── Navbar.jsx
+│       │   ├── DashboardCard.jsx
+│       │   ├── RequestTable.jsx
+│       │   ├── StatusBadge.jsx
+│       │   ├── Loader.jsx
+│       │   ├── ImagePreview.jsx
+│       │   ├── SearchBar.jsx
+│       │   └── Modal.jsx
+│       └── pages/             # Layout pages
+│           ├── Login.jsx
+│           ├── Dashboard.jsx
+│           ├── CreateRequest.jsx
+│           ├── RequestHistory.jsx
+│           ├── AdminPanel.jsx
+│           ├── RequestDetails.jsx
+│           └── NotFound.jsx
+└── README.md
+```
+
+---
+
+## 🚀 Installation & Running Guide
+
+### 1. Database Configuration
+1. Open **MySQL Workbench** or MySQL shell and log in.
+2. Load and run the file `database/schema.sql` to initialize the `pharmacy_returns` database and seeds.
+3. Keep MySQL running locally on port `3306`.
+
+### 2. Flask Backend Setup
+1. Change directory to the `backend/` folder:
+   ```bash
+   cd backend
+   ```
+2. (Recommended) Create a Python virtual environment:
+   ```bash
+   python -m venv venv
+   # Activate on Windows:
+   venv\Scripts\activate
+   # Activate on macOS/Linux:
+   source venv/bin/activate
+   ```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Configure `.env` file details:
+   - Make sure your local MySQL host/password matches the fields.
+   - Insert your `GEMINI_API_KEY` (if not defined, the system will fall back to simulated mock analyses).
+5. Start the backend Flask server:
+   ```bash
+   python app.py
+   ```
+   *The backend will boot up on http://localhost:5000.*
+
+### 3. React Frontend Setup
+1. Open a new terminal and navigate to the `frontend/` folder:
+   ```bash
+   cd frontend
+   ```
+2. Install npm packages:
+   ```bash
+   npm install
+   ```
+3. Boot the Vite development server:
+   ```bash
+   npm run dev
+   ```
+   *The frontend will open up on http://localhost:5173.*
+
+---
+
+## 🔑 Demo Account Credentials
+
+Use these credentials to log in:
+
+- **Admin Account**: 
+  - Username: `admin`
+  - Password: `admin123`
+- **Pharmacy User**:
+  - Username: `pharmacy`
+  - Password: `pharmacy123`
+
+---
+
+## 📡 API Reference Endpoints
+
+| Method | Endpoint | Description | Role |
+|:---|:---|:---|:---|
+| `POST` | `/api/auth/login` | Verifies login credentials and returns user details. | All |
+| `POST` | `/api/create-request` | Saves new return stock details, decodes Base64, triggers AI analysis. | Pharmacy |
+| `GET` | `/api/requests` | Fetches filtered returns list (optionally by search text/status query). | All |
+| `GET` | `/api/request/<id>` | Pulls full details, image paths, and AI logs for a specific request. | All |
+| `PUT` | `/api/update-status` | Accepts `{ id, status }` to approve or reject a request. | Admin |
+| `GET` | `/api/dashboard-stats` | Aggregates status counts and returns recent activities. | All |
+| `POST` | `/api/analyze-image` | On-demand image checker. | Developer |
+
+---
+
+## 🔮 Future Improvements
+
+- **Cloud Databases**: Migrate to AWS RDS or PlanetScale MySQL.
+- **JSON Web Tokens (JWT)**: Replace local session store with signed HTTP-only JWTs.
+- **Automated Email Reports**: Send status updates to pharmacies upon approval.
+- **OCR Batch Scan**: Auto-fill form inputs (Name, Batch, Expiry) using Gemini OCR.
+- **AI Fraud Assessment**: Compare uploaded package condition to vendor standards to block counterfeit submissions.
+- **Interactive Analytics Charts**: Display returns frequency over time using Recharts.
+- **WhatsApp Notification Alerts**: Direct integration using Twilio.

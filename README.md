@@ -4,6 +4,12 @@ A modern, production-grade, full-stack pharmacy/medical inventory workflow appli
 
 ---
 
+## 🌐 Live Demo
+You can view the live, deployed frontend for this project here:
+**[Paste your Vercel URL here]**
+
+---
+
 ## 🌟 Features
 
 ### 🏥 Pharmacy Users
@@ -24,9 +30,9 @@ A modern, production-grade, full-stack pharmacy/medical inventory workflow appli
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React.js, React Router DOM, Axios, Lucide Icons, Modern HSL CSS variables, responsive design
+- **Frontend**: React.js, React Router DOM, Axios, Lucide Icons, Modern HSL CSS variables, responsive design. **Deployed on Vercel.**
 - **Backend**: Python Flask, Flask-CORS, mysql-connector-python
-- **Database**: Local MySQL (MySQL Workbench)
+- **Database**: **Supabase** (Serverless PostgreSQL with connection pooling)
 - **AI Engine**: Google Gemini (using the `google-generativeai` client SDK)
 
 ---
@@ -35,8 +41,6 @@ A modern, production-grade, full-stack pharmacy/medical inventory workflow appli
 
 ```
 Returns_&_Damaged_Stock _Request_System/
-├── database/
-│   └── schema.sql             # SQL database table definitions & seed credentials
 ├── backend/
 │   ├── app.py                 # Flask server bootstrapper
 │   ├── requirements.txt       # Backend dependencies
@@ -45,7 +49,7 @@ Returns_&_Damaged_Stock _Request_System/
 │   ├── config/
 │   │   └── db_config.py       # Configuration parser
 │   ├── database/
-│   │   └── db_helper.py       # Thread-safe MySQL connection pooling wrappers
+│   │   └── db_helper.py       # Thread-safe connection pooling wrappers
 │   ├── services/
 │   │   └── gemini_service.py  # Gemini 1.5 Flash Prompt analysis integration
 │   ├── controllers/
@@ -55,6 +59,8 @@ Returns_&_Damaged_Stock _Request_System/
 │   │   ├── auth_routes.py
 │   │   └── request_routes.py
 │   └── uploads/               # Local folder storing images (Git ignored)
+├── database/
+│   └── schema.sql             # SQL database table definitions & seed credentials
 ├── frontend/
 │   ├── package.json           # Frontend dependencies (React Router, Axios, Lucide)
 │   ├── vite.config.js         # Vite bundler configuration
@@ -64,23 +70,7 @@ Returns_&_Damaged_Stock _Request_System/
 │       ├── index.css          # Premium design CSS themes (dark UI)
 │       ├── App.jsx            # Routing and protected layout shells
 │       ├── components/        # Reusable functional components
-│       │   ├── Sidebar.jsx
-│       │   ├── Navbar.jsx
-│       │   ├── DashboardCard.jsx
-│       │   ├── RequestTable.jsx
-│       │   ├── StatusBadge.jsx
-│       │   ├── Loader.jsx
-│       │   ├── ImagePreview.jsx
-│       │   ├── SearchBar.jsx
-│       │   └── Modal.jsx
 │       └── pages/             # Layout pages
-│           ├── Login.jsx
-│           ├── Dashboard.jsx
-│           ├── CreateRequest.jsx
-│           ├── RequestHistory.jsx
-│           ├── AdminPanel.jsx
-│           ├── RequestDetails.jsx
-│           └── NotFound.jsx
 └── README.md
 ```
 
@@ -89,9 +79,9 @@ Returns_&_Damaged_Stock _Request_System/
 ## 🚀 Installation & Running Guide
 
 ### 1. Database Configuration
-1. Open **MySQL Workbench** or MySQL shell and log in.
-2. Load and run the file `database/schema.sql` to initialize the `pharmacy_returns` database and seeds.
-3. Keep MySQL running locally on port `3306`.
+1. This project is configured to run on **Supabase**.
+2. Create a Supabase project and grab your IPv4 connection pooler details (Host, User, Password, Port `6543`).
+3. Run the SQL commands in `database/schema.sql` within your Supabase SQL editor to create the tables.
 
 ### 2. Flask Backend Setup
 1. Change directory to the `backend/` folder:
@@ -111,7 +101,7 @@ Returns_&_Damaged_Stock _Request_System/
    pip install -r requirements.txt
    ```
 4. Configure `.env` file details:
-   - Make sure your local MySQL host/password matches the fields.
+   - Make sure your Supabase connection strings match the fields (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_PORT`).
    - Insert your `GEMINI_API_KEY` (if not defined, the system will fall back to simulated mock analyses).
 5. Start the backend Flask server:
    ```bash
@@ -165,7 +155,7 @@ Use these credentials to log in:
 
 ## 🔮 Future Improvements
 
-- **Cloud Databases**: Migrate to AWS RDS or PlanetScale MySQL.
+- **Backend Deployment**: Host the Flask API on Render or AWS.
 - **JSON Web Tokens (JWT)**: Replace local session store with signed HTTP-only JWTs.
 - **Automated Email Reports**: Send status updates to pharmacies upon approval.
 - **OCR Batch Scan**: Auto-fill form inputs (Name, Batch, Expiry) using Gemini OCR.
